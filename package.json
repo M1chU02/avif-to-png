@@ -1,0 +1,22 @@
+{
+  "name": "avif-to-png",
+  "version": "1.0.0",
+  "description": "CLI tool to convert AVIF images to PNG",
+  "main": "index.js",
+  "bin": {
+    "avif-to-png": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "web": "node server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "sharp": "^0.33.0",
+    "commander": "^11.1.0",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "archiver": "^5.3.2"
+  }
+}
