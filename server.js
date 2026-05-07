@@ -23,6 +23,28 @@ app.post('/upload', upload.array('avif', 20), async (req, res) => {
     return res.status(400).send('No files uploaded');
   }
 
+  // If only one file, return PNG directly instead of zip
+  if (req.files.length === 1) {
+    const file = req.files[0];
+    const inputPath = file.path;
+    const baseName = path.parse(file.originalname).name;
+    try {
+      const pngBuffer = await sharp(inputPath).png().toBuffer();
+      res.set({
+        'Content-Type': 'image/png',
+        'Content-Disposition': `attachment; filename="${baseName}.png"`
+      });
+      res.send(pngBuffer);
+    } catch (e) {
+      console.error('Conversion error for', file.originalname, e);
+      res.status(500).send(`Error converting ${file.originalname}: ${e.message}`);
+    } finally {
+      // remove temp upload
+      fs.unlink(inputPath, () => {});
+    }
+    return; // done
+  }
+
   // Prepare zip response
   res.set({
     'Content-Type': 'application/zip',
