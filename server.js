@@ -7,8 +7,12 @@ const fs = require('fs');
 
 const app = express();
 // accept many files, allow reasonably large uploads
+const os = require('os');
+const uploadDir = path.join(os.tmpdir(), 'uploads');
+fs.mkdirSync(uploadDir, { recursive: true });
+
 const upload = multer({
-  dest: 'uploads/',
+  dest: uploadDir,
   limits: { fileSize: 50 * 1024 * 1024 } // 50 MiB per file
 });
 
